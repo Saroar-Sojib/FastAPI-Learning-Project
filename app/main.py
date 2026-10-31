@@ -1,11 +1,17 @@
-
 from fastapi import FastAPI
-from app.api.first_fast_api_class import router as first_fast_api_app
-from app.api.first_fast_api_class_2nd_part import router as first_fast_api_class_2nd_part
-# Create the application instance
-app = FastAPI(
-    title="FastAPI Learning API"
-)
-app.include_router(first_fast_api_app,prefix="/first_fast_api",tags=["first_fast_api"])
-app.include_router(first_fast_api_class_2nd_part,prefix="/first_fast_api_v2",tags=["first_fast_api_v2"])
 
+from app.api.router import api_router
+from app.core.config import settings
+
+app = FastAPI(
+    title=settings.APP_NAME,
+    debug=settings.DEBUG
+)
+
+# All feature routers are registered inside api_router (app/api/router.py)
+app.include_router(api_router)
+
+
+@app.get("/health", tags=["Health"])
+def health_check():
+    return {"status": "ok"}
