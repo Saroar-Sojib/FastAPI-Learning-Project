@@ -19,7 +19,8 @@ class UserRepository:
 
     def get_by_id(self, user_id: int) -> User | None:
         # Primary-key lookup. Equivalent to: SELECT * FROM users WHERE id = :id
-        return self.db.get(User, user_id)
+        res = self.db.get(User, user_id)
+        return res
 
     def get_by_email(self, email: str) -> User | None:
         stmt = select(User).where(User.email == email)

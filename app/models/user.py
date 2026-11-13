@@ -28,6 +28,9 @@ class User(Base):
     status: Mapped[UserStatus] = mapped_column(
         Enum(UserStatus, name="user_status"), default=UserStatus.ACTIVE, nullable=False
     )
+    work_location: Mapped[str] = mapped_column(
+        String(255), nullable= True
+    )
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # server_default=func.now() lets the database fill the timestamp
