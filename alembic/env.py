@@ -25,7 +25,8 @@ from app.infrastructure.database import Base  # noqa: E402
 
 # Importing app.models registers every model class on Base.metadata.
 # Without this import, autogenerate would see an empty schema.
-import app.models  # noqa: E402,F401
+from app.models.user import User
+from app.models.employee import Employee
 
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 

@@ -4,13 +4,19 @@ User ORM model.
 A model class = one database table. Each `Mapped[...]` attribute = one column.
 """
 
+from __future__ import annotations
+
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, Enum, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.enums import UserRole, UserStatus
 from app.infrastructure.database import Base
+
+if TYPE_CHECKING:
+    from app.models.employee import Employee
 
 
 class User(Base):
@@ -39,6 +45,12 @@ class User(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
+
+    employee: Mapped[Employee | None] = relationship(
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self) -> str:
