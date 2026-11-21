@@ -17,6 +17,7 @@ from app.infrastructure.database import Base
 
 if TYPE_CHECKING:
     from app.models.employee import Employee
+    from app.models.refresh_token import RefreshToken
 
 
 class User(Base):
@@ -50,6 +51,11 @@ class User(Base):
     employee: Mapped[Employee | None] = relationship(
         back_populates="user",
         uselist=False,
+        cascade="all, delete-orphan",
+    )
+
+    refresh_tokens: Mapped[list[RefreshToken]] = relationship(
+        back_populates="user",
         cascade="all, delete-orphan",
     )
 

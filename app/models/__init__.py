@@ -1,3 +1,5 @@
 from app.models.user import User
 from app.models.employee import Employee
-__all__ = ["User", "Employee"]
+from app.models.refresh_token import RefreshToken
+
+__all__ = ["User", "Employee", "RefreshToken"]

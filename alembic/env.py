@@ -27,6 +27,7 @@ from app.infrastructure.database import Base  # noqa: E402
 # Without this import, autogenerate would see an empty schema.
 from app.models.user import User
 from app.models.employee import Employee
+from app.models.refresh_token import RefreshToken
 
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 

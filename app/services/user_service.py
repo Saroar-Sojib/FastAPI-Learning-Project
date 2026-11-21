@@ -6,19 +6,13 @@ The service layer holds business rules (e.g. "email must be unique",
 and raises HTTPException so routes stay thin.
 """
 
-import hashlib
-
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.core.security import hash_password
 from app.models import User
 from app.repositories import UserRepository
 from app.schemas import UserCreate, UserUpdate
-
-
-def hash_password(raw_password: str) -> str:
-    # NOTE: for learning only. Real projects use bcrypt / argon2 (e.g. passlib).
-    return hashlib.sha256(raw_password.encode()).hexdigest()
 
 
 class UserService:

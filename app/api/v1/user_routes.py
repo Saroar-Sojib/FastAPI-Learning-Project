@@ -10,6 +10,7 @@ Routes do three things only:
 from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_current_user
 from app.infrastructure.database import get_db
 from app.schemas import UserCreate, UserResponse, UserUpdate
 from app.services import UserService
@@ -22,7 +23,7 @@ def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(db)
 
 
-@router.get("", response_model=list[UserResponse])
+@router.get("", response_model=list[UserResponse], dependencies=[Depends(get_current_user)])
 def list_users(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
@@ -31,7 +32,7 @@ def list_users(
     return service.list_users(skip=skip, limit=limit)
 
 
-@router.get("/{user_id}", response_model=UserResponse)
+@router.get("/{user_id}", response_model=UserResponse, dependencies=[Depends(get_current_user)])
 def get_user(user_id: int, service: UserService = Depends(get_user_service)):
     return service.get_user(user_id)
 
@@ -41,7 +42,7 @@ def create_user(payload: UserCreate, service: UserService = Depends(get_user_ser
     return service.create_user(payload)
 
 
-@router.patch("/{user_id}", response_model=UserResponse)
+@router.patch("/{user_id}", response_model=UserResponse, dependencies=[Depends(get_current_user)])
 def update_user(
     user_id: int,
     payload: UserUpdate,
@@ -50,6 +51,6 @@ def update_user(
     return service.update_user(user_id, payload)
 
 
-@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(get_current_user)])
 def delete_user(user_id: int, service: UserService = Depends(get_user_service)):
     service.delete_user(user_id)
